@@ -1,0 +1,502 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TIMETABLE SCHEDULER — CENTRAL DESIGN SYSTEM
+   Single source of truth. Every colour / radius / shadow / type token the
+   app uses is declared here exactly once; components reference tokens
+   (or the Tailwind utilities generated from them) and never raw hex.
+
+   PALETTE  (ledger / timetable-sheet direction)
+     canvas   warm cream page background         #F1E9D8
+     surface  card background, lighter cream     #FBF7EC
+     nav      sidebar cream, a shade deeper      #E8DFC9
+     header   bright yellow top header           #F7C500
+     accent   vivid orange — primary + active    #E8590C
+     ink      near-black text and rules          #14130F
+     line     the thin BLACK structural border   #1A1A1A
+
+   The design is deliberately flat and ruled: near-zero shadow, square or
+   2–4px corners, and a monospaced face throughout. Separation comes from
+   hairline black borders, the way a printed timetable sheet is ruled.
+   ═══════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* ── Warm neutral ramp ──────────────────────────────────────────────
+     Overrides Tailwind's cool `slate` so the several hundred existing
+     `slate-*` usages across the app land correctly on the cream canvas. */
+  --color-slate-50:  #fdfaf3;
+  --color-slate-100: #f7f1e2;
+  --color-slate-200: #ece3ce;
+  --color-slate-300: #d9cdb2;
+  --color-slate-400: #b0a488;
+  --color-slate-500: #8a8069;
+  --color-slate-600: #6b6353;
+  --color-slate-700: #4a453a;
+  --color-slate-800: #2a2721;
+  --color-slate-900: #1a1814;
+  --color-slate-950: #14130f;
+
+  /* ── Accent = the single vivid orange. Primary buttons, active nav. ─── */
+  --color-accent-50:  #fdf0e6;
+  --color-accent-100: #fbdfc9;
+  --color-accent-200: #f6bd96;
+  --color-accent-300: #f09a5c;
+  --color-accent-400: #ec7c33;
+  --color-accent-500: #e8590c;   /* the reference orange — active nav, dots */
+  --color-accent-600: #cf4a09;   /* CTA fills (AA contrast with white text)  */
+  --color-accent-700: #a5390a;
+  --color-accent-800: #7c2b07;
+
+  /* ── Gold = the bright yellow header family ─────────────────────────── */
+  --color-gold-50:  #fffaeb;
+  --color-gold-100: #fff2c4;
+  --color-gold-200: #ffe894;
+  --color-gold-300: #fddc55;
+  --color-gold-400: #f7c500;   /* THE reference yellow — top header fill   */
+  --color-gold-500: #dbaa00;
+  --color-gold-600: #b08600;
+
+  /* ── Muted supporting accents (status, chart series) ───────────────── */
+  --color-teal-100:   #d9e8e6;
+  --color-teal-300:   #8ab5b0;
+  --color-teal-500:   #2f726c;
+  --color-teal-600:   #245c57;
+  --color-green-100:  #dfead9;
+  --color-green-300:  #9bb58f;
+  --color-green-500:  #4a7048;
+  --color-green-600:  #3a5a39;
+
+  /* ── Brand = structural near-black ink (kept for parity with old code) */
+  --color-brand-50:  #f7f6f4;
+  --color-brand-100: #edecE8;
+  --color-brand-200: #d9d7d3;
+  --color-brand-300: #b8b5af;
+  --color-brand-400: #8a8578;
+  --color-brand-500: #6b6659;
+  --color-brand-600: #3a3830;
+  --color-brand-700: #26241e;
+  --color-brand-800: #1a1a1a;
+  --color-brand-900: #111110;
+
+  /* ── Cream navigation surfaces (the fixed sidebar) ─────────────────── */
+  --color-nav:     #e8dfc9;
+  --color-nav-50:  #f0e8d6;
+  --color-nav-100: #e2d7bd;
+  --color-nav-200: #d3c5a5;
+  --color-nav-300: #b8a882;
+
+  /* ── Canvas / card ────────────────────────────────────────────────── */
+  --color-canvas:  #f1e9d8;
+  --color-surface: #fbf7ec;
+
+  /* ── The bright yellow top header ─────────────────────────────────── */
+  --color-header:      #f7c500;
+  --color-header-deep: #dbaa00;
+
+  /* ── Ink + the black structural border ─────────────────────────────── */
+  --color-ink:      #14130f;
+  --color-ink-soft: #6b6353;
+  --color-ink-mute: #948d7d;
+  --color-line:     #1a1a1a;
+
+  /* ── Semantic (muted, warm) ───────────────────────────────────────── */
+  --color-success: #3f6b3d;
+  --color-warning: #a9761f;
+  --color-danger:  #a8352c;
+  --color-info:    #3d5a75;
+
+  /* ── Typography: monospaced throughout ─────────────────────────────── */
+  --font-sans: 'IBM Plex Mono', 'Space Mono', ui-monospace, SFMono-Regular,
+               Menlo, Consolas, monospace;
+  --font-mono: 'IBM Plex Mono', 'Space Mono', ui-monospace, SFMono-Regular,
+               Menlo, Consolas, monospace;
+
+  /* ── Corners: square to barely-rounded. Kills every `rounded-2xl` /
+        `rounded-3xl` in the tree without touching a single component. ── */
+  --radius-xs: 2px;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+  --radius-2xl: 4px;
+  --radius-3xl: 4px;
+  --radius-4xl: 4px;
+
+  /* ── Shadows: minimal. The black hairline border does the separating. */
+  --shadow-card:    0 1px 0 rgba(26,26,26,0.06);
+  --shadow-card-lg: 0 6px 18px rgba(26,26,26,0.10);
+  --shadow-nav:     none;
+  --shadow-pill:    none;
+
+  /* ── Animations ───────────────────────────────────────────────────── */
+  --animate-fade-in:  fadeIn 0.15s ease-out;
+  --animate-slide-in: slideIn 0.15s ease-out;
+  --animate-slide-up: slideUp 0.15s ease-out;
+
+  @keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes slideIn { from { opacity: 0; translate: -12px 0 } to { opacity: 1; translate: 0 0 } }
+  @keyframes slideUp { from { opacity: 0; translate: 0 8px } to { opacity: 1; translate: 0 0 } }
+}
+
+/* ── Base Styles ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Tabular numerals everywhere — this is a scheduling ledger, columns align. */
+.font-numeric, table, .tabular-nums { font-variant-numeric: tabular-nums; }
+
+/* Custom scrollbar — thin, warm */
+::-webkit-scrollbar        { width: 8px; height: 8px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: #d9cdb2; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #b0a488; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   REUSABLE CLASSES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Cards: cream, square, thin black border, no lift ───────────────── */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  box-shadow: none;
+}
+.glass-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  box-shadow: none;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.375rem; font-weight: 600; border-radius: 3px;
+  transition: all 0.12s; cursor: pointer; border: 1px solid var(--color-line);
+  outline: none;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:focus-visible { outline: 2px solid var(--color-accent-500); outline-offset: 1px; }
+
+/* Primary CTA — the one place the vivid orange is used at full strength.
+   accent-600 (not -500) keeps white label text at AA contrast. */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.375rem; font-weight: 600; border-radius: 3px;
+  transition: all 0.12s; cursor: pointer;
+  border: 1px solid var(--color-line); outline: none;
+  padding: 0.375rem 0.75rem; font-size: 0.75rem;
+  background-color: var(--color-accent-600);
+  color: #ffffff;
+  box-shadow: none;
+}
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary:hover { background-color: var(--color-accent-700); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.375rem; font-weight: 600; border-radius: 3px;
+  transition: all 0.12s; cursor: pointer; outline: none;
+  padding: 0.375rem 0.75rem; font-size: 0.75rem;
+  background-color: var(--color-surface); color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+.btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-secondary:hover { background-color: var(--color-gold-100); }
+
+/* Destructive — warm red, not fire-engine */
+.btn-danger {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+  font-weight: 600; border-radius: 3px; transition: all 0.12s;
+  cursor: pointer; outline: none;
+  padding: 0.375rem 0.75rem; font-size: 0.75rem;
+  background-color: #f7e3e1; color: #8f2c25;
+  border: 1px solid var(--color-line);
+}
+.btn-danger:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-danger:hover { background-color: #f1d3d0; }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+  font-weight: 600; border-radius: 3px; transition: all 0.12s;
+  cursor: pointer; border: 1px solid transparent; outline: none;
+  padding: 0.3125rem 0.5625rem; font-size: 0.75rem;
+  color: var(--color-ink-soft); background: transparent;
+}
+.btn-ghost:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-ghost:hover { color: var(--color-ink); background-color: var(--color-slate-200); }
+
+.btn-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 3px; transition: all 0.12s; cursor: pointer;
+  border: 1px solid transparent; outline: none; padding: 0.3125rem;
+  color: var(--color-ink); background: transparent;
+}
+.btn-icon:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-icon:hover { background-color: rgba(26,26,26,0.08); }
+
+.btn-lg { padding: 0.5rem 1rem; font-size: 0.8125rem; }
+.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.6875rem; }
+
+/* ── Inputs ──────────────────────────────────────────────────────────── */
+.input {
+  display: block; width: 100%;
+  background-color: #ffffff;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  color: var(--color-ink);
+  font-size: 0.75rem;
+  padding: 0.375rem 0.625rem;
+  outline: none;
+  transition: box-shadow 0.12s;
+}
+.input::placeholder { color: var(--color-ink-mute); }
+.input:hover { background-color: #fffdf7; }
+.input:focus { box-shadow: 0 0 0 2px rgba(232,89,12,0.20); }
+
+/* Search bars — ONE shared spec for every page search bar and the topbar.
+   The left padding reserves a gutter for the absolutely positioned
+   .search-icon so it can never overlap the placeholder or typed text. */
+.search-input {
+  display: block; width: 100%; height: 2rem;
+  background-color: #fffdf7;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  color: var(--color-ink);
+  font-size: 0.75rem; line-height: 1rem;
+  padding: 0 0.625rem 0 1.875rem;
+  outline: none;
+  transition: box-shadow 0.12s;
+}
+.search-input::placeholder { color: var(--color-ink-mute); }
+.search-input:hover { background-color: #ffffff; }
+.search-input:focus {
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(26,26,26,0.12);
+}
+.search-input:focus-visible { outline: none; }
+.search-icon {
+  position: absolute; left: 0.5rem; top: 50%;
+  transform: translateY(-50%);
+  width: 0.875rem; height: 0.875rem;
+  color: var(--color-ink); pointer-events: none;
+}
+@media (max-width: 640px) {
+  .search-input { font-size: 0.75rem; padding-right: 0.5rem; }
+}
+.input-error { border-color: var(--color-danger); }
+
+/* Micro-label: the reference's small-caps field label */
+.label-caps {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+.label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--color-ink); margin-bottom: 0.25rem; }
+.error-text { font-size: 0.6875rem; color: var(--color-danger); margin-top: 0.1875rem; }
+
+/* ── Two-column label/value pairs: quiet caps label above a bold value ── */
+.kv-grid  { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 1.25rem; }
+@media (max-width: 640px) { .kv-grid { grid-template-columns: minmax(0, 1fr); } }
+.kv-label { display: block; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink-soft); margin-bottom: 0.125rem; }
+.kv-value { display: block; font-size: 0.8125rem; font-weight: 600; color: var(--color-ink); }
+
+/* ── Tables ──────────────────────────────────────────────────────────── */
+.table-container {
+  overflow-x: auto; border-radius: 3px;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+.table { width: 100%; font-size: 0.75rem; text-align: left; border-collapse: collapse; }
+.table th {
+  background-color: var(--color-gold-100);
+  color: var(--color-ink);
+  font-weight: 700; font-size: 0.625rem;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 0.4375rem 0.75rem;
+  border-bottom: 1px solid var(--color-line);
+  border-right: 1px solid var(--color-line);
+  white-space: nowrap;
+}
+.table th:last-child { border-right: none; }
+.table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-line); border-right: 1px solid var(--color-line); color: var(--color-ink); }
+.table td:last-child { border-right: none; }
+.table tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background-color: var(--color-gold-50); }
+
+/* ── Badges / status pills — small square chips ──────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  padding: 0.125rem 0.4375rem;
+  border-radius: 2px;
+  border: 1px solid var(--color-line);
+  font-size: 0.625rem; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.badge-success { background-color: var(--color-green-100); color: var(--color-green-600); }
+.badge-warning { background-color: var(--color-gold-200);  color: var(--color-gold-600); }
+.badge-danger  { background-color: #f7e3e1; color: #8f2c25; }
+.badge-info    { background-color: #e4ebf2; color: #35566f; }
+.badge-gray    { background-color: var(--color-slate-200); color: var(--color-ink-soft); }
+/* The orange status pill — used sparingly, per the reference */
+.badge-brand   { background-color: var(--color-accent-100); color: var(--color-accent-800); }
+
+/* Inline status pill that sits beside a page title */
+.status-pill {
+  display: inline-flex; align-items: center; gap: 0.3125rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 2px;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-accent-100);
+  color: var(--color-accent-800);
+  font-size: 0.625rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* ── Page header: breadcrumb, then a bold title ──────────────────────── */
+.page-breadcrumb {
+  display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap;
+  font-size: 0.625rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.375rem;
+}
+.page-breadcrumb-sep { color: var(--color-slate-400); }
+.page-header {
+  display: flex; flex-wrap: wrap; align-items: flex-start;
+  justify-content: space-between; gap: 0.75rem;
+  margin-bottom: 0.875rem;
+}
+.page-title {
+  font-size: 1.25rem; font-weight: 700;
+  letter-spacing: -0.01em; line-height: 1.2;
+  color: var(--color-ink);
+  text-transform: uppercase;
+}
+.page-subtitle { font-size: 0.6875rem; color: var(--color-ink-soft); margin-top: 0.1875rem; }
+
+/* ── Metric cards: icon + value + label, ruled and compact ───────────── */
+.metric-card {
+  display: flex; align-items: center; gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  box-shadow: none;
+  transition: background-color 0.12s;
+}
+.metric-card-interactive { cursor: pointer; }
+.metric-card-interactive:hover { background-color: var(--color-gold-50); }
+.metric-icon {
+  width: 1.75rem; height: 1.75rem; border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-gold-100);
+  color: var(--color-ink);
+  flex-shrink: 0;
+}
+.metric-dot { width: 0.5rem; height: 0.5rem; border-radius: 9999px; flex-shrink: 0; }
+.metric-label { font-size: 0.625rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink-soft); }
+.metric-value { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; color: var(--color-ink); font-variant-numeric: tabular-nums; }
+
+/* Legacy stat-card kept so existing pages keep working */
+.stat-card { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; }
+.stat-icon { width: 2rem; height: 2rem; border-radius: 3px; border: 1px solid var(--color-line); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* ── Nav: fixed cream rail, black icons, ORANGE active item ─────────── */
+.nav-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.3125rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  font-size: 0.75rem; font-weight: 500;
+  color: var(--color-ink);
+  transition: all 0.12s; cursor: pointer; text-decoration: none;
+}
+.nav-item:hover { background-color: var(--color-gold-100); border-color: var(--color-line); }
+/* Active = solid orange block with a black rule */
+.nav-item-active {
+  color: var(--color-ink);
+  background-color: var(--color-accent-500);
+  border-color: var(--color-line);
+  font-weight: 700;
+}
+.nav-section-label {
+  font-size: 0.5625rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--color-ink-soft);
+}
+
+/* ── Modal ───────────────────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(20,19,15,0.45);
+  z-index: 50;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal {
+  background: var(--color-surface);
+  border-radius: 3px;
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-card-lg);
+  width: 100%; max-height: 90vh; overflow-y: auto;
+  animation: var(--animate-slide-up);
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.625rem 1rem;
+  background-color: var(--color-gold-100);
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* ── Forms ───────────────────────────────────────────────────────────── */
+.form-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+@media (min-width: 768px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+.form-group  { display: flex; flex-direction: column; }
+.form-footer {
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem;
+  padding-top: 0.75rem; border-top: 1px solid var(--color-line);
+}
+
+/* ── Timetable cells: ruled, square, minimal ────────────────────────── */
+.tt-cell         { min-height: 52px; border-radius: 2px; padding: 0.25rem; font-size: 0.625rem; font-weight: 500; transition: all 0.12s; cursor: pointer; user-select: none; }
+.tt-cell-theory  { background-color: #ffffff; border: 1px solid var(--color-line); color: var(--color-ink); }
+.tt-cell-lab     { background-color: var(--color-gold-100); border: 1px solid var(--color-line); color: var(--color-ink); }
+.tt-cell-elective{ background-color: var(--color-accent-50); border: 1px solid var(--color-line); color: var(--color-accent-800); }
+.tt-cell-break   { background-color: var(--color-slate-200); border: 1px solid var(--color-line); color: var(--color-ink-soft); cursor: default; }
+.tt-cell-empty   { border: 1px dashed var(--color-slate-400); background: transparent; }
+.tt-cell-empty:hover { background-color: var(--color-gold-50); }
+.tt-cell-locked  { opacity: 0.9; cursor: not-allowed; background-color: var(--color-gold-200); }
+
+/* ── Utilities ───────────────────────────────────────────────────────── */
+.shadow-card    { box-shadow: var(--shadow-card); }
+.shadow-card-lg { box-shadow: var(--shadow-card-lg); }
+.shadow-nav     { box-shadow: var(--shadow-nav); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.animate-fade-in  { animation: var(--animate-fade-in); }
+.animate-slide-in { animation: var(--animate-slide-in); }
+.animate-slide-up { animation: var(--animate-slide-up); }
+
+/* ── Empty state ─────────────────────────────────────────────────────── */
+.empty-state       { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 1rem; text-align: center; }
+.empty-state-title { font-size: 0.9375rem; font-weight: 700; color: var(--color-ink); margin-bottom: 0.25rem; text-transform: uppercase; }
+.empty-state-desc  { font-size: 0.75rem; color: var(--color-ink-soft); max-width: 24rem; }
+
+.divider { border-top: 1px solid var(--color-line); margin: 0.875rem 0; }
